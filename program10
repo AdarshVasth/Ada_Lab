@@ -1,0 +1,59 @@
+#include <stdio.h>
+
+int set[20], subset[20];
+int n, target;
+
+void subsetSum(int sum, int k, int r)
+{
+    subset[k] = 1;
+
+    if (sum + set[k] == target)
+    {
+        printf("{ ");
+        for (int i = 0; i <= k; i++)
+        {
+            if (subset[i] == 1)
+                printf("%d ", set[i]);
+        }
+        printf("}\n");
+    }
+    else if (sum + set[k] + set[k + 1] <= target)
+    {
+        subsetSum(sum + set[k], k + 1, r - set[k]);
+    }
+
+    if ((sum + r - set[k] >= target) &&
+        (sum + set[k + 1] <= target))
+    {
+        subset[k] = 0;
+        subsetSum(sum, k + 1, r - set[k]);
+    }
+}
+
+int main()
+{
+    int total = 0;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter elements in increasing order:\n");
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &set[i]);
+        total += set[i];
+    }
+
+    printf("Enter target sum: ");
+    scanf("%d", &target);
+
+    if (total < target)
+    {
+        printf("No solution exists.\n");
+        return 0;
+    }
+
+    subsetSum(0, 0, total);
+
+    return 0;
+}
