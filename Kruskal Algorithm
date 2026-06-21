@@ -1,0 +1,92 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Edge
+{
+    int u, v, wt;
+};
+
+bool compare(Edge a, Edge b)
+{
+    return a.wt < b.wt;
+}
+
+int find(int x, vector<int>& parent)
+{
+    if (parent[x] == x)
+        return x;
+
+    return parent[x] = find(parent[x], parent);
+}
+
+void Union(int x, int y, vector<int>& parent)
+{
+    parent[x] = y;
+}
+
+void Kruskal(int n, vector<Edge>& edges)
+{
+    sort(edges.begin(), edges.end(), compare);
+
+    vector<int> parent(n);
+    for (int i = 0; i < n; i++)
+        parent[i] = i;
+
+    int count = 0;
+    int sum = 0;
+
+    cout << "Edges in MST:\n";
+
+    for (auto e : edges)
+    {
+        int i = find(e.u, parent);
+        int j = find(e.v, parent);
+
+        if (i != j)
+        {
+            cout << e.u << " - " << e.v
+                 << " : " << e.wt << endl;
+
+            sum += e.wt;
+            count++;
+
+            Union(i, j, parent);
+
+            if (count == n - 1)
+                break;
+        }
+    }
+
+    if (count != n - 1)
+    {
+        cout << "No MST exists\n";
+    }
+    else
+    {
+        cout << "Total Cost = " << sum << endl;
+    }
+}
+
+int main()
+{
+    int n, m;
+
+    cout << "Enter number of vertices and edges: ";
+    cin >> n >> m;
+
+    vector<Edge> edges(m);
+
+    cout << "Enter (u v weight):\n";
+    for (int i = 0; i < m; i++)
+    {
+        cin >> edges[i].u
+            >> edges[i].v
+            >> edges[i].wt;
+    }
+
+    Kruskal(n, edges);
+
+    return 0;
+}
