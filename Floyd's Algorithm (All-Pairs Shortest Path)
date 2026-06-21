@@ -1,0 +1,65 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+#define INF 99999
+
+void Floyd(int Cost[][100], int D[][100], int n)
+{
+    // Copy cost matrix to distance matrix
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            D[i][j] = Cost[i][j];
+        }
+    }
+
+    // Floyd's Algorithm
+    for (int k = 0; k < n; k++)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                D[i][j] = min(D[i][j],
+                              D[i][k] + D[k][j]);
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    int Cost[100][100], D[100][100];
+
+    cout << "Enter cost matrix (use 99999 for INF):\n";
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> Cost[i][j];
+        }
+    }
+
+    Floyd(Cost, D, n);
+
+    cout << "\nShortest Distance Matrix:\n";
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (D[i][j] == INF)
+                cout << "INF ";
+            else
+                cout << D[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
