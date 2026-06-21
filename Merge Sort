@@ -1,0 +1,63 @@
+#include <iostream>
+using namespace std;
+
+void SimpleMerge(int A[], int lo, int mid, int hi)
+{
+    int C[1000]; // temporary array
+
+    int i = lo;
+    int j = mid + 1;
+    int k = lo;
+
+    while (i <= mid && j <= hi)
+    {
+        if (A[i] < A[j])
+            C[k++] = A[i++];
+        else
+            C[k++] = A[j++];
+    }
+
+    while (i <= mid)
+        C[k++] = A[i++];
+
+    while (j <= hi)
+        C[k++] = A[j++];
+
+    for (int i = lo; i <= hi; i++)
+        A[i] = C[i];
+}
+
+void MergeSort(int A[], int lo, int hi)
+{
+    if (lo >= hi)
+        return;
+
+    int mid = (lo + hi) / 2;
+
+    MergeSort(A, lo, mid);
+    MergeSort(A, mid + 1, hi);
+
+    SimpleMerge(A, lo, mid, hi);
+}
+
+int main()
+{
+    int n;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    int A[n];
+
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++)
+        cin >> A[i];
+
+    MergeSort(A, 0, n - 1);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++)
+        cout << A[i] << " ";
+
+    return 0;
+}
